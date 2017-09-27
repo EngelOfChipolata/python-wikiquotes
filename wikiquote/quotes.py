@@ -53,3 +53,23 @@ def quotes(page_title, max_quotes=utils.DEFAULT_MAX_QUOTES, lang='en'):
     html_content = data['parse']['text']['*']
     html_tree = lxml.html.fromstring(html_content)
     return langs.extract_quotes_lang(lang, html_tree, max_quotes)
+
+
+def quotes_and_authors(page_title, lang='en'):
+    if lang not in langs.SUPPORTED_LANGUAGES:
+        raise utils.UnsupportedLanguageException(
+            'Unsupported language: ' + lang)
+
+    local_page_url = utils.PAGE_URL.format(lang=lang)
+    data = utils.json_from_url(local_page_url, page_title)
+    if 'error' in data:
+        raise utils.NoSuchPageException(
+            'No pages matched the title: ' + page_title)
+
+    if _is_disambiguation(data['parse']['categories']):
+        raise utils.DisambiguationPageException(
+            'Title returned a disambiguation page.')
+
+    html_content = data['parse']['text']['*']
+    html_tree = lxml.html.fromstring(html_content)
+    return langs.extract_quotes_and_authors_lang(lang, html_tree)

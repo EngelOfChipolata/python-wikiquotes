@@ -1,5 +1,5 @@
 from itertools import islice
-
+from lxml import etree
 
 MAIN_PAGE = "Wikiquote:Accueil"
 
@@ -12,6 +12,35 @@ def extract_quotes(tree, max_quotes):
                          max_quotes))
 
     return quotes
+
+
+def extract_quotes_and_authors(tree):
+    WAIT_FOR_h3 = 0
+    WAIT_FOR_a = 1
+    state = WAIT_FOR_h3
+    current_character = None
+    quotes = {}
+    for element in tree.iter():
+        if state == WAIT_FOR_h3:
+            if element.tag == "h3":
+                current_character = None
+                state = WAIT_FOR_a
+                continue
+            if element.tag == "span" and "class" in element.attrib and element.attrib["class"] == "citation":
+                quotes[element.text] = current_character
+                continue
+        if state == WAIT_FOR_a:
+            if element.tag == "a" and "class" in element.attrib and element.attrib["class"] == "extiw":
+                current_character = element.text
+                state = WAIT_FOR_h3
+            continue
+    return quotes
+    # author_nodes = tree.xpath('//h3/span[@class="mw-headline"]')
+    # print(author_nodes)
+    # authors = list(islice((span.text_content()
+    #                       for span in author_nodes),
+    #                      max_quotes))
+    # print(authors)
 
 
 def qotd(html_tree):

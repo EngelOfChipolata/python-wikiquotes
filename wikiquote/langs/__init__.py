@@ -28,6 +28,10 @@ def extract_quotes_lang(lang, html_tree, max_quotes):
     check_lang(lang)
     return lang_dict[lang].extract_quotes(html_tree, max_quotes)
 
+def extract_quotes_and_authors_lang(lang, html_tree):
+    check_lang(lang)
+    return lang_dict[lang].extract_quotes_and_authors(html_tree)
+
 
 def qotd_lang(lang, html_tree):
     check_lang(lang)

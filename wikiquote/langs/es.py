@@ -118,6 +118,10 @@ def extract_quotes(tree, max_quotes):
     return quotes_list
 
 
+def extract_quotes_and_authors(tree):
+    raise NotImplementedError()
+
+
 def qotd(html_tree):
     tree = html_tree.get_element_by_id('mf-FDD')
 

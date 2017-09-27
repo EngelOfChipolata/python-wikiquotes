@@ -1,4 +1,4 @@
-from .quotes import quotes, random_titles, search
+from .quotes import quotes, random_titles, search, quotes_and_authors
 from .qotd import quote_of_the_day
 
 from . import langs
