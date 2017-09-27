@@ -29,7 +29,8 @@ def extract_quotes_and_authors(tree):
                 state = WAIT_FOR_a
                 continue
             if element.tag == "span" and "class" in element.attrib and element.attrib["class"] == "citation":
-                found_quotes[element.text] = current_character
+                if current_character is not None:
+                    found_quotes[element.text] = current_character
                 continue
             if element.tag == "i" and element.text == "Voir le recueil de citations :":
                 state = WAIT_FOR_a_DEDICATED_PAGE
@@ -50,7 +51,8 @@ def extract_quotes_and_authors(tree):
                 import wikiquote.quotes
                 dedicated_quotes = wikiquote.quotes(link, max_quotes=1000, lang='fr')
                 for q in dedicated_quotes:
-                    found_quotes[q] = current_character
+                    if current_character is not None:
+                        found_quotes[q] = current_character
                 current_character = None
                 state = WAIT_FOR_h3
             continue
