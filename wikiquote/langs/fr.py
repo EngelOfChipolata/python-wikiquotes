@@ -7,7 +7,7 @@ MAIN_PAGE = "Wikiquote:Accueil"
 
 def extract_quotes(tree, max_quotes):
     # French wiki uses a "citation" HTML class
-    node_list = tree.xpath('//p/span[@class="citation"]')
+    node_list = tree.xpath('//div[@class="citation"]')
     quotes = list(islice((span.text_content()
                           for span in node_list),
                          max_quotes))
@@ -28,7 +28,7 @@ def extract_quotes_and_authors(tree):
                 current_character = None
                 state = WAIT_FOR_a
                 continue
-            if element.tag == "span" and "class" in element.attrib and element.attrib["class"] == "citation":
+            if element.tag == "div" and "class" in element.attrib and element.attrib["class"] == "citation":
                 if current_character is not None:
                     found_quotes[element.text] = current_character
                 continue
