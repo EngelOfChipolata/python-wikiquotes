@@ -32,7 +32,7 @@ def extract_quotes_and_authors(tree):
                 if current_character is not None:
                     found_quotes[element.text] = current_character
                 continue
-            if element.tag == "i" and element.text == "Voir le recueil de citations :":
+            if element.tag == "i" and element.text is not None and "Voir le recueil de citations :" in element.text:
                 state = WAIT_FOR_a_DEDICATED_PAGE
                 continue
 
